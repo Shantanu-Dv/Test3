@@ -1,0 +1,624 @@
+{
+  "settings": {
+    "number_of_shards": 5,
+    "number_of_replicas": 1,
+    "analysis": {
+      "analyzer": {
+        "analyzeSimple": {
+          "tokenizer": "standard",
+          "filter": [
+            "synonymFilter",
+            "lowercase",
+            "asciiFolder"
+          ],
+          "type": "custom"
+        },
+        "analyzeQuesShingles": {
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "asciiFolder",
+            "shingleFilter"
+          ],
+          "type": "custom"
+        },
+        "AnalyzerNormText": {
+          "tokenizer": "TokenizerMathText",
+          "char_filter": [
+            "CharFilterBlanks",
+            "HandleChemFormulae",
+            "HandleArcTrig",
+            "splitEquations",
+            "HandleDegree",
+            "HandleLatexContext",
+            "SeperateTextNum",
+            "CharFilterStopWord"
+          ],
+          "filter": [
+            "synonymFilter",
+            "lowercase",
+            "asciifolding",
+            "LatexSynonyms",
+            "TokenFilterMathStop"
+          ],
+          "type": "custom"
+        },
+        "MathTextAnalyzer": {
+          "tokenizer": "TokenizerMathText",
+          "char_filter": [
+            "CharFilterBlanks",
+            "HandleChemFormulae",
+            "HandleArcTrig",
+            "splitEquations",
+            "HandleDegree",
+            "HandleLatexContext",
+            "SeperateTextNum",
+            "CharFilterStopWord"
+          ],
+          "filter": [
+            "lowercase",
+            "asciifolding",
+            "LatexSynonyms",
+            "TokenFilterMathStop",
+            "TokenFilterMathShingles"
+          ],
+          "type": "custom"
+        }
+      },
+      "filter": {
+        "synonymFilter": {
+          "synonyms": [
+            "alpha, α",
+            "beta, β",
+            "chi, x, χ",
+            "delta, δ",
+            "epsilon, e, ε",
+            "eta, n, η",
+            "gamma, γ",
+            "iota, i, ι",
+            "kappa, k, κ",
+            "lambda, λ",
+            "mu, u, μ",
+            "nu, ν",
+            "omega, ω",
+            "phi, φ",
+            "pi, π",
+            "psi, ψ",
+            "rho, ρ",
+            "sigma, σ",
+            "tau, τ",
+            "theta, θ",
+            "upsilon, υ",
+            "xi, ξ",
+            "zeta, ζ",
+            "epsilon, ε",
+            "kappa, k, κ",
+            "phi, φ",
+            "pi, π",
+            "rho, ρ",
+            "sigma, σ",
+            "theta, θ",
+            "delta, δ",
+            "gamma, γ",
+            "lambda, λ",
+            "omega, ω",
+            "phi, φ",
+            "pi, π",
+            "psi, ψ",
+            "sigma, σ",
+            "theta, θ",
+            "upsilon, υ",
+            "integration, integral, int, ∫",
+            "double integration, double integral, double int, ∬",
+            "similar, similarity, ~",
+            "parallel, ||",
+            "infinity, infinite, ∞",
+            "nabla, ∇",
+            "partial derivative, partial differentiation, ∂",
+            "forall, ∀",
+            "exists, ∃",
+            "h bar, h slash, ℏ",
+            "mho, ℧",
+            "^, pow, power, ^",
+            "limit, lim",
+            "sqrt, square root, root, √",
+            "first, 1st",
+            "second, 2nd",
+            "third, 3rd",
+            "fourth, 4th",
+            "fifth, 5th",
+            "sixth, 6th",
+            "seventh, 7th",
+            "eighth, 8th",
+            "ninth, 9th",
+            "tenth, 10th",
+            "eleventh, 11th",
+            "twelfth, 12th",
+            "thirteenth, 13th",
+            "fourteenth, 14th",
+            "fifteenth, 15th",
+            "sixteenth, 16th",
+            "seventeenth, 17th",
+            "eighteenth, 18th",
+            "nineteenth, 19th",
+            "twentieth, 20th",
+            "twenty first, twenty-first, 21st",
+            "twenty second, twenty-second, 22nd",
+            "twenty third, twenty-third, 23rd",
+            "twenty fourth, twenty-fourth, 24th",
+            "twenty fifth, twenty-fifth, 25th",
+            "thirtieth, thirtieth, 30th",
+            "thirty first, thirty-first, 31st",
+            "thirty second, thirty-second, 32nd",
+            "thirty third, thirty-third, 33rd",
+            "thirty fourth, thirty-fourth, 34th",
+            "fortieth, fortieth, 40th",
+            "fiftieth, fiftieth, 50th",
+            "sixtieth, sixtieth, 60th",
+            "seventieth, seventieth, 70th",
+            "eightieth, eightieth, 80th",
+            "ninetieth, ninetieth, 90th",
+            "ninety ninth, ninety-ninth, 99th",
+            "hundredth, hundredth, 100th"
+          ],
+          "updatble": true,
+          "lenient": true,
+          "type": "synonym"
+        },
+        "asciiFolder": {
+          "preserve_original": true,
+          "type": "asciifolding"
+        },
+        "shingleFilter": {
+          "min_shingle_size": 2,
+          "max_shingle_size": 2,
+          "output_unigrams": false,
+          "type": "shingle"
+        },
+        "LatexSynonyms": {
+          "synonyms": [
+            "\\\\underbrace,\\\\overbrace,\\\\overparen,\\\\underparen\\\\dashleftarrow, \\\\gets, \\\\hookleftarrow, \\\\impliedby, \\\\leftarrow, \\\\leftarrow, \\\\nleftarrow, \\\\nleftarrow, \\\\leftarrowtail, \\\\leftharpoondown, \\\\leftharpoonup, \\\\leftleftarrows, \\\\lleftarrow, \\\\longleftarrow, \\\\longleftarrow, \\\\overleftarrow, \\\\underleftarrow, \\\\twoheadleftarrow, \\\\xleftarrow => \\\\leftarrow",
+            "\\\\dashrightarrow, \\\\searrow, \\\\hookrightarrow, \\\\implies, \\\\rightarrow, \\\\rightarrow, \\\\rightarrowtail, \\\\rightharpoondown, \\\\rightharpoonup, \\\\rightrightarrows, \\\\rrightarrow, \\\\twoheadrightarrow, \\\\underrightarrow, \\\\longrightarrow, \\\\overrightarrow, \\\\longrightarrow, \\\\longmapsto, \\\\mapsto, \\\\to, \\\\xrightarrow,\\\\vec => \\\\rightarrow",
+            "\\\\approx,\\\\\\\\~,approximately,\\\\approxeq,\\\\backsim,\\\\thickapprox,\\\\thicksim,\\\\tilde,\\\\widetilde,\\\\simeq,similar,\\\\sim,similar,\\\\backsimeq,\\\\eqsim => approx",
+            "\\\\alpha,\\\\alpha,\\\\propto,proportional => alpha",
+            "\\\\beta,\\\\beta => beta",
+            "\\\\gamma,\\\\gamma,\\\\gamma => gamma",
+            "\\\\delta,\\\\delta,\\\\delta,\\\\partial,\\\\triangle,\\\\vartriangle => delta",
+            "\\\\varepsilon,\\\\varepsilon,\\\\epsilon,\\\\epsilon,\\\\varepsilon => epsilon",
+            "\\\\zeta,\\\\zeta => zeta",
+            "\\\\eta,\\\\eta => eta",
+            "\\\\theta,\\\\vartheta,\\\\vartheta,\\\\theta,\\\\theta,\\\\vartheta => theta",
+            "\\\\varkappa,\\\\varkappa,\\\\kappa,\\\\kappa,\\\\varkappa => kappa",
+            "\\\\lambda,\\\\lambda,\\\\lambda,\\\\leftthreetimes => lambda",
+            "\\\\xi,\\\\xi,\\\\xi => xi",
+            "\\\\pi,\\\\varpi,\\\\varpi,\\\\pi,\\\\pi,\\\\varpi,\\\\prod,\\\\barwedge => pi",
+            "\\\\varrho,\\\\varrho,\\\\rho,\\\\rho,\\\\varrho => rho",
+            "\\\\sigma,\\\\varsigma,\\\\varsigma\\\\sigma,\\\\sigma,\\\\varsigma,sum => sigma",
+            "\\\\upsilon,\\\\upsilon,\\\\upsilon,u,\\\\mu,\\\\mu => upisilon",
+            "\\\\phi,\\\\varphi,\\\\varphi,\\\\phi,\\\\phi,\\\\varphi => phi",
+            "\\\\omega,\\\\omega,\\\\omega => omega",
+            "\\\\sin,sin => \\\\sin",
+            "\\\\cos,cos => \\\\cos",
+            "\\\\tan,tan => \\\\tan",
+            "\\\\cot,cot => \\\\cot",
+            "\\\\sec,sec => \\\\sec",
+            "\\\\cosec,cosec,\\\\csc => \\\\csc",
+            "\\\\sinh,sinh => \\\\sinh",
+            "\\\\cosh,cosh => \\\\cosh",
+            "\\\\tanh,tanh => \\\\tanh",
+            "\\\\coth,coth => \\\\coth",
+            "\\\\sech,sech => \\\\sech",
+            "\\\\cosech,cosech => cosech",
+            "\\\\cong,congruent => cong",
+            "lessthan,&lt,\\\\angle,\\\\lt,< => \\\\lessthan",
+            "\\\\leq,\\\\leqslant,\\\\leqq,\\\\le => \\\\leq",
+            "\\\\nleq,\\\\nleqslant => nleq",
+            "greaterthan,&gt,\\\\gt,\\\\rangle,> => \\\\greaterthan",
+            "\\\\geq,\\\\geqslant,\\\\eqslantgtr,>=,\\\\geqq => \\\\geqq",
+            "\\\\ngeq,\\\\ngeqslant => ngeq",
+            "\\\\parallel,\\\\rvert,\\\\shortparallel,parallel => \\\\parallel",
+            "\\\\ni,\\\\owns => owns",
+            "\\\\mid,divides => \\\\divides",
+            "\\\\prime,'\\'' => prime",
+            "\\\\above,\\\\abovewithdelims,\\\\atop,\\\\atopwithdelims,\\\\cfrac,\\\\dfrac,\\\\frac,\\\\genfrac,\\\\over,\\\\overwithdelims,\\\\tfrac => \\\\frac",
+            "\\\\and,&",
+            "\\\\arrowvert,\\\\vert,\\\\lvert,\\\\rvert,\\\\nmid,\\\\shortmid,\\\\nshortmid,\\\\rvert => \\\\rvert",
+            "\\\\uparrow,\\\\upharpoonleft,\\\\upharpoonright,\\\\upuparrows => uparrow",
+            "\\\\updownarrow,\\\\updownarrow => updownarrow",
+            "\\\\binom,\\\\choose,\\\\dbinom,\\\\tbinom => \\\\binom",
+            "\\\\brack,\\\\lbrack,\\\\rbrack => brack",
+            "\\\\cap,\\\\bigcap,\\\\cap,\\\\cup,\\\\cup,\\\\doublecap,\\\\doublecup => cap",
+            "\\\\circ,o,0,\\\\omicron => \\\\circ",
+            "\\\\diagdown,\\\\\\\\,\\\\div,\\\\diagup,\\\\/,\\\\not,\\\\setminus,\\\\smallsetminus => /",
+            "\\\\diamond,\\\\diamond,\\\\diamondsuit,\\\\lozenge => \\\\lozenge",
+            "\\\\clubsuit,\\\\club => \\\\club",
+            "\\\\heartsuit,\\\\heart => \\\\heart",
+            "\\\\spadesuit,\\\\spade => \\\\spade",
+            "\\\\dagger,\\\\ddagger => \\\\dagger",
+            "\\\\downarrow,\\\\downarrow => \\\\downarrow",
+            "\\\\gcd,gcd ==> \\\\gcd",
+            "\\\\dot,\\\\cdot \\\\\\\\. => \\\\dot",
+            "\\\\hom,hom => hom",
+            "\\\\iff,\\\\leftrightarrow,\\\\leftrightarrow,\\\\leftrightarrows,\\\\leftrightharpoons,\\\\leftrightsquigarrow,\\\\underleftrightarrow,\\\\longleftrightarrow,\\\\longleftrightarrow,\\\\overleftrightarrow,\\\\rightleftarrows,\\\\rightleftharpoons => \\\\leftandrightarrow",
+            "\\\\int,\\\\intop,\\\\lmoustache,\\\\smallint => \\\\int",
+            "\\\\ker,ker => ker",
+            "\\\\leftroot,\\\\uproot,\\\\root,\\\\sqrt,\\\\surd => \\\\surd",
+            "\\\\lgroup,\\\\rgroup,\\\\pod => \\\\pod",
+            "\\\\lim,lim => \\\\lim",
+            "\\\\liminf,lim inf => \\\\inf",
+            "\\\\limits,\\\\nolimits => nolimits",
+            "\\\\limsup,lim sup => limsup",
+            "\\\\ln,ln => ln",
+            "\\\\lnot,\\\\neg => neg",
+            "\\\\max,max => max",
+            "\\\\mod,\\\\pmod,\\\\bmod => mod",
+            "\\\\normalsize => normalsize",
+            "\\\\pr,pr => pr",
+            "\\\\sup,sup => sup",
+            "\\\\therefore,\\\\because => because",
+            "\\\\underbrace,\\\\overbrace,\\\\overparen,\\\\underparen => \\\\overparen"
+          ],
+          "type": "synonym"
+        },
+        "TokenFilterMathStop": {
+          "stopwords": [
+            "\\",
+            "{",
+            "}",
+            ",",
+            "\\large",
+            "\\tiny",
+            "\\hbox",
+            "\\mspace",
+            "\\substack",
+            "\\hskip",
+            "\\textit",
+            "\\mathrm",
+            "\\bf",
+            "\\huge",
+            "\\style",
+            "\\ulcorner",
+            "\\textstyle",
+            "\\bigl",
+            "\\biggr",
+            "\\urcorner",
+            "\\displaylines",
+            "\\thinspace",
+            "\\it",
+            "\\raise",
+            "\\buildrel",
+            "\\leqalignno",
+            "\\hline",
+            "\\texttt",
+            "\\mathit",
+            "\\cancel",
+            "\\mathsf",
+            "\\hphantom",
+            "\\bigr",
+            "\\llcorner",
+            "\\textrm",
+            "\\scriptstyle",
+            "\\mathfrak",
+            "\\rule",
+            "\\lrcorner",
+            "\\hfill",
+            "\\negthickspace",
+            "\\sf",
+            "\\llap",
+            "\\vcenter",
+            "\\href",
+            "\\normalsize",
+            "\\mathbf",
+            "\\eqalignno",
+            "\\mathtt",
+            "\\shoveleft",
+            "\\mathord",
+            "\\wedge",
+            "\\underset",
+            "\\mathpunct",
+            "\\mathchoice",
+            "\\small",
+            "\\mathopen",
+            "\\notag",
+            "\\mathop",
+            "\\vphantom",
+            "\\mkern",
+            "\\verb",
+            "\\mathclose",
+            "\\skew",
+            "\\bigg",
+            "\\mit",
+            "\\mod",
+            "\\shoveright",
+            "\\hdashline",
+            "\\biggl",
+            "\\fbox",
+            "\\rm",
+            "\\tag",
+            "\\cal",
+            "\\textsf",
+            "\\bigm",
+            "\\scriptsize",
+            "\\moveleft",
+            "\\negthinspace",
+            "\\hat",
+            "\\frak",
+            "\\sideset",
+            "\\scriptscriptstyle",
+            "\\rlap",
+            "\\enspace",
+            "\\lower",
+            "\\phantom",
+            "\\mathbb",
+            "\\right",
+            "\\eqalign",
+            "\\mathstrut",
+            "\\nobreakspace",
+            "\\kern",
+            "\\end",
+            "\\negmedspace",
+            "\\widehat",
+            "\\biggm",
+            "\\boxed",
+            "\\mathrel",
+            "\\big",
+            "\\pmb",
+            "\\hspace",
+            "\\hfil",
+            "\\text",
+            "\\scr",
+            "\\smash",
+            "\\cr",
+            "\\textbf",
+            "\\moveright",
+            "\\mbox",
+            "\\mskip",
+            "\\displaystyle",
+            "\\overset",
+            "\\space",
+            "\\mathscr",
+            "\\mathbin",
+            "\\left",
+            "\\mathinner",
+            "\\oldstyle",
+            "\\begin",
+            "\\mathcal",
+            "\\cssid",
+            "\\strut"
+          ],
+          "type": "stop"
+        },
+        "TokenFilterMathShingles": {
+          "min_shingle_size": 3,
+          "max_shingle_size": 3,
+          "token_separator": " ",
+          "output_unigrams": false,
+          "type": "shingle"
+        }
+      },
+      "tokenizer": {
+        "TokenizerMathText": {
+          "pattern": "(\\\\[A-Za-z]+|[A-Za-z0-9\\.\\'\\'']+|[\\^\\+-\\/\\\\\\*\\><\\%]|_{3}|\\&)",
+          "type": "simple_pattern"
+        }
+      },
+      "char_filter": {
+        "CharFilterBlanks": {
+          "pattern": "(\\.{3,})|(_{3,})",
+          "replacement": "____",
+          "type": "pattern_replace"
+        },
+        "HandleChemFormulae": {
+          "pattern": "\\b(\\w)(\\s)(?=\\w_?\\b)",
+          "replacement": "$1",
+          "type": "pattern_replace"
+        },
+        "HandleArcTrig": {
+          "pattern": "\\b(?:\\\\)?(sin|cos|tan|cosec|cot|sec|csc)\\^\\{?-1\\}?",
+          "replacement": "\\arc$1",
+          "type": "pattern_replace"
+        },
+        "splitEquations": {
+          "pattern": "([\\^\\+-\\/\\*\\><\\%\\.\\'\\''\\&\\(\\)])",
+          "replacement": " $1 ",
+          "type": "pattern_replace"
+        },
+        "HandleDegree": {
+          "pattern": "˚",
+          "replacement": "\\circ",
+          "type": "pattern_replace"
+        },
+        "HandleLatexContext": {
+          "pattern": "\\\\begin\\{([^\\}]+)\\}\\{([^\\}]+)\\}",
+          "replacement": "{$1}",
+          "type": "pattern_replace"
+        },
+        "SeperateTextNum": {
+          "pattern": "((\\d+)([A-Za-z]+)|([A-Za-z]+)(\\d+))",
+          "replacement": "$1 $2",
+          "type": "pattern_replace"
+        },
+        "CharFilterStopWord": {
+          "pattern": "((\\.)(?:(?!\\w{2})))|((?:(?<!\\w{2}))(\\.))|(\\\\(left|right|text|mathrm))||\\\\end\\{\\w+\\}",
+          "replacement": "",
+          "type": "pattern_replace"
+        }
+      }
+    },
+    "similarity": {
+      "BM25-demote-length": {
+        "type": "BM25",
+        "b": 1
+      },
+      "BM25-promote-length": {
+        "type": "BM25",
+        "b": 0
+      }
+    }
+  },
+  "mappings": {
+    "dynamic": false,
+    "properties": {
+      "hint_available": {
+        "type": "boolean"
+      },
+      "multiple_correct": {
+        "type": "boolean"
+      },
+      "question_linked": {
+        "type": "boolean"
+      },
+      "solution_available": {
+        "type": "boolean"
+      },
+      "question_id": {
+        "type": "integer"
+      },
+      "question_linked_to_id": {
+        "type": "integer"
+      },
+      "solution_id": {
+        "type": "integer"
+      },
+      "subject_id": {
+        "type": "integer"
+      },
+      "hint_image": {
+        "type": "keyword"
+      },
+      "mx_l1_images": {
+        "type": "keyword"
+      },
+      "mx_l2_images": {
+        "type": "keyword"
+      },
+      "passage_image": {
+        "type": "keyword"
+      },
+      "question_image": {
+        "type": "keyword"
+      },
+      "question_status": {
+        "type": "keyword"
+      },
+      "question_style": {
+        "type": "keyword"
+      },
+      "right_choice": {
+        "type": "keyword"
+      },
+      "solution_image": {
+        "type": "keyword"
+      },
+      "subject_ids": {
+        "type": "keyword"
+      },
+      "assertion": {
+        "type": "text"
+      },
+      "hint": {
+        "type": "text"
+      },
+      "mx_l1": {
+        "type": "text"
+      },
+      "mx_l2": {
+        "type": "text"
+      },
+      "passage": {
+        "type": "text"
+      },
+      "passage_footer": {
+        "type": "text"
+      },
+      "passage_header": {
+        "type": "text"
+      },
+      "reason": {
+        "type": "text"
+      },
+      "solution": {
+        "type": "text"
+      },
+      "question": {
+        "type": "text"
+      },
+      "choice": {
+        "properties": {
+          "choice": {
+            "type": "text"
+          },
+          "choice_id": {
+            "type": "long"
+          },
+          "image": {
+            "type": "keyword"
+          },
+          "is_right": {
+            "type": "boolean"
+          },
+          "label": {
+            "type": "keyword"
+          }
+        },
+        "type": "nested"
+      },
+      "question_plain": {
+        "analyzer": "analyzeSimple",
+        "similarity": "BM25-demote-length",
+        "fields": {
+          "shingles": {
+            "analyzer": "analyzeQuesShingles",
+            "similarity": "BM25-demote-length",
+            "type": "text"
+          }
+        },
+        "type": "text"
+      },
+      "question_plain_full": {
+        "analyzer": "analyzeSimple",
+        "similarity": "BM25-demote-length",
+        "fields": {
+          "shingles": {
+            "analyzer": "analyzeQuesShingles",
+            "similarity": "BM25-demote-length",
+            "type": "text"
+          }
+        },
+        "type": "text"
+      },
+      "question_full": {
+        "analyzer": "AnalyzerNormText",
+        "fields": {
+          "shingles": {
+            "analyzer": "MathTextAnalyzer",
+            "similarity": "BM25-demote-length",
+            "type": "text"
+          },
+          "length": {
+            "analyzer": "AnalyzerNormText",
+            "enable_position_increments": false,
+            "type": "token_count"
+          }
+        },
+        "type": "text"
+      },
+      "question_full_latex": {
+        "analyzer": "AnalyzerNormText",
+        "fields": {
+          "shingles": {
+            "analyzer": "MathTextAnalyzer",
+            "similarity": "BM25-demote-length",
+            "type": "text"
+          },
+          "length": {
+            "analyzer": "AnalyzerNormText",
+            "enable_position_increments": false,
+            "type": "token_count"
+          }
+        },
+        "type": "text"
+      }
+    }
+  }
+}

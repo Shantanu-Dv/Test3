@@ -1,0 +1,35 @@
+# Elasticsearch configuration settings
+# addresses:
+#   - http://localhost:9200
+# auto_suggestions: http://localhost:9200
+# search: http://localhost:9200
+# username: elastic
+# password: rIzs3wmHHSxbyeiUXhHS
+# certificatefingerprint: e900788a0b32bc4ceeca237184e28edf42173a298d1ebec13539bee50f8ad3d4
+
+
+server_port: "4000"
+elasticsearch:
+  auto_suggestions: "http://localhost:9200"
+  search: "http://localhost:9200"
+mathpix:
+  api_url: https://api.mathpix.com/v3/text
+  app_id: 
+  app_key: 
+google_vision:
+  api_url: "https://vision.googleapis.com/v1/images:annotate?key=<>"
+#sentry:
+#  dsn: ""
+#  env: "prod"
+#  debug: false
+newrelic:
+  app_name: "Doubt Recommendation Service"
+  license_key: "<>"
+#datadog:
+#  version: "v1"
+#  env: "preprod"
+#  service_name: "doc-reco-go"
+#  agent_host: "localhost"
+#  agent_port: "8126"
+
+#  Environment = "/internal/config/app_secret/doc_reco_settings.yml=/home/ubuntu/doc-reco-go/internal/config/app_secret/doc_reco_settings.yml" "server_port=4000" "elasticsearch.auto_suggestions=http://172.17.0.1:9200" "elasticsearch.search=http://172.17.0.1:9200

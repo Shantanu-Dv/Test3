@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+  doc-reco-go:
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - "4001:4000"
+    volumes:
+      - ${PWD}/internal/:/app/internal/
+    healthcheck:
+      test: curl --fail http://localhost:4000 || exit 1
+      interval: 60s
+      retries: 10
+      start_period: 10s
+      timeout: 1s
+    deploy:
+      resources:
+        limits:
+          memory: 1G

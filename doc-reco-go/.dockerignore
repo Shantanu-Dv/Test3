@@ -1,0 +1,10 @@
+.idea
+es_data
+Dockerfile
+Dockerfile.dev
+README.md
+reco.env*
+docker-compose.yml
+doc-reco-go
+**/.git
+model

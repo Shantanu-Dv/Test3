@@ -1,0 +1,89 @@
+pipeline {
+    agent {
+        label "cluster-ops"
+    }
+    environment {
+        AWS_REGISTRY_URL="662360374697.dkr.ecr.ap-south-1.amazonaws.com/doc-reco"
+        AWS_DEFAULT_REGION="ap-south-1"
+        PROD_KUBERNETES_CONTEXT="okinawa.k8s.toppr.io"
+        PROD_NAMESPACE="doc-reco"
+        PROD_DEPLOYMENT_NAME="doc-reco-goapp"
+        PROD_CONTAINER_NAME="app"
+        SUCCESS_MSG="Deployed build:${BUILD_NUMBER} from *${GIT_LOCAL_BRANCH}* branch of *${GIT_URL}* repo, with commit *${GIT_COMMIT}* to *${PROD_KUBERNETES_CONTEXT}* and EC2s for *DOC-RECO-GOAPP*"
+        FAIL_MSG="Deployment failed :scream_cat: \nJOB URL:${BUILD_URL}console \nRepo : $GIT_URL \nBranch: ${GIT_LOCAL_BRANCH} "
+    }
+
+    stages {
+
+        stage("ECR Login") {
+            agent{
+                label "cluster-ops"
+            }
+            steps{
+                sh '''
+                    eval $(aws ecr get-login --region ${AWS_DEFAULT_REGION} --no-include-email)
+                
+                '''
+            }
+        }
+
+        stage("Build Image") {
+            agent {
+                label "prod-ec2-slave"
+            }
+
+            steps {
+                sh '''
+                    eval $(aws ecr get-login --region ${AWS_DEFAULT_REGION} --no-include-email)
+                    export BUILD_ID="${GIT_LOCAL_BRANCH}"_"${GIT_COMMIT}"_"${BUILD_NUMBER}"
+                    echo "BUILD_ID=$BUILD_ID"
+                    docker build -t for-now:0  .
+                    docker tag for-now:0 ${AWS_REGISTRY_URL}:$BUILD_ID
+                    echo "IMAGE_URI=${AWS_REGISTRY_URL}:$BUILD_ID"
+                    docker push ${AWS_REGISTRY_URL}:$BUILD_ID
+                
+                '''
+            }
+        }
+
+        stage("Deploy to Production Kubernetes") {
+            
+            agent {
+                docker {
+                    image "662360374697.dkr.ecr.ap-south-1.amazonaws.com/deploy:kctl_okinawa"
+                    args "-i --entrypoint="
+                    reuseNode true
+                    label "cluster-ops"
+                }
+            }
+
+            steps {
+                sh '''
+                    export BUILD_ID="${GIT_LOCAL_BRANCH}_${GIT_COMMIT}_${BUILD_NUMBER}"
+                    export CLUSTER=${PROD_KUBERNETES_CONTEXT}
+                    export CONTEXT=${PROD_KUBERNETES_CONTEXT}
+                    echo "Deploying image=${AWS_REGISTRY_URL}:${BUILD_ID} to $CLUSTER"
+                    kctl --context ${CONTEXT} set image deployment/${PROD_DEPLOYMENT_NAME} ${PROD_CONTAINER_NAME}=${AWS_REGISTRY_URL}:${BUILD_ID} -n ${PROD_NAMESPACE}
+
+                '''
+            }
+        }
+
+    }
+
+    post {
+
+        always {
+            deleteDir()
+        }
+
+        success {
+            slackSend(color: "good", message: "$SUCCESS_MSG")
+        }
+
+        failure {
+            slackSend(color: "danger", message: "$FAIL_MSG")
+        }
+
+    }
+}
